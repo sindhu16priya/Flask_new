@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h2>User Dashboard</h2>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    
+    <div class="dashboard">
+        <h3>Welcome, {{ current_user.username }}</h3>
+
+        <div class="stat-cards">
+            <div class="stat-card">
+                <h4>Recent Accidents</h4>
+                <!-- Display a brief summary of recent accidents -->
+                <ul>
+                    {% for accident in recent_accidents %}
+                        <li>{{ accident.date }} - {{ accident.location }} (Severity: {{ accident.severity }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="stat-card">
+                <h4>Accident Severity</h4>
+                <!-- Display accident severity count or other details -->
+                <ul>
+                    {% for severity in accident_severity %}
+                        <li>{{ severity }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <h3>Recent Accidents</h3>
+        <!-- Display detailed accident data in a table -->
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Severity</th>
+            </tr>
+            {% for accident in recent_accidents %}
+            <tr>
+                <td>{{ accident.date }}</td>
+                <td>{{ accident.location }}</td>
+                <td>{{ accident.severity }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Submit Feedback</h3>
+        <form action="{{ url_for('submit_feedback') }}" method="POST">
+            <textarea name="feedback" placeholder="Your feedback..." required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

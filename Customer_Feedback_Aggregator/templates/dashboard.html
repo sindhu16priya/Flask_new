@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2 class="mt-5">Dashboard</h2>
+
+    <p>Welcome, you are logged in as <strong>{{ role }}</strong>.</p>
+
+    {% if role == 'admin' %}
+    <!-- Admin-Only Content -->
+
+    <h4>User Feedback Sentiment Distribution</h4>
+    <canvas id="userFeedbackChart"></canvas>
+
+    <h4>Spiderman Trailer Comments Sentiment</h4>
+    <canvas id="spidermanChart"></canvas>
+
+    <h4>Bahubali Trailer Comments Sentiment</h4>
+    <canvas id="bahubaliChart"></canvas>
+
+    <h4>Clothing Sentiment</h4>
+    <canvas id="clothingChart"></canvas>
+
+    <h4>Jewelry Sentiment</h4>
+    <canvas id="jewelryChart"></canvas>
+
+
+    <!-- JavaScript for rendering charts -->
+    <script>
+        // User Feedback Chart
+        var ctx = document.getElementById('userFeedbackChart').getContext('2d');
+        var userFeedbackChart = new Chart(ctx, {
+          type: 'pie',
+          data: JSON.parse('{{ user_feedback_chart.data|tojson }}'),
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    size: 50 
+                  }
+                }
+              }
+            }
+          }
+        });
+      
+        // Spiderman Trailer Comments Sentiment Chart
+        var ctxSpiderman = document.getElementById('spidermanChart').getContext('2d');
+        var spidermanChart = new Chart(ctxSpiderman, {
+          type: 'pie',
+          data: JSON.parse('{{ spiderman_chart.data|tojson }}'),
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    size: 50 
+                  }
+                }
+              }
+            }
+          }
+        });
+      
+        // Bahubali Trailer Comments Sentiment Chart
+        var ctxBahubali = document.getElementById('bahubaliChart').getContext('2d');
+        var bahubaliChart = new Chart(ctxBahubali, {
+          type: 'pie',
+          data: JSON.parse('{{ bahubali_chart.data|tojson }}'),
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    size: 50
+                  }
+                }
+              }
+            }
+          }
+        });
+      
+        // Clothing Sentiment Chart
+        var ctxClothing = document.getElementById('clothingChart').getContext('2d');
+        var clothingChart = new Chart(ctxClothing, {
+          type: 'bar',
+          data: JSON.parse('{{ clothing_chart.data|default({"labels": [], "datasets": [{"data": []}]})|tojson }}'),
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    size: 50 
+                  }
+                }
+              }
+            }
+          }
+        });
+      
+        // Jewelry Sentiment Chart
+        var ctxJewelry = document.getElementById('jewelryChart').getContext('2d');
+        var jewelryChart = new Chart(ctxJewelry, {
+          type: 'bar',
+          data: JSON.parse('{{ jewelry_chart.data|default({"labels": [], "datasets": [{"data": []}]})|tojson }}'),
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    size: 50 
+                  }
+                }
+              }
+            }
+          }
+        });
+      </script>
+
+    <!-- YouTube Comments Section -->
+    <h4>YouTube Comments Analysis</h4>
+    <ul>
+      {% for comment in youtube_comments %}
+        <li>{{ comment }}</li>
+      {% endfor %}
+    </ul>
+
+    <!-- Links to Fetch YouTube Comments -->
+    <h4>Click to Fetch Comments for YouTube Videos</h4>
+    <ul>
+      <li><a href="{{ url_for('store_youtube_comments', video_id='JfVOs4VSpmA') }}">Fetch Comments for Spiderman Trailer</a></li>
+      <li><a href="{{ url_for('store_youtube_comments', video_id='sOEg_YZQsTI') }}">Fetch Comments for Bahubali Trailer</a></li>
+    </ul>
+
+    {% else %}
+    <!-- User-Only Content -->
+    <h4>Submit Feedback</h4>
+    <form action="{{ url_for('submit_feedback_route') }}" method="POST">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Feedback Message</label>
+        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-success">Submit Feedback</button>
+    </form>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+  </div>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</body>
+</html>
+
+
+

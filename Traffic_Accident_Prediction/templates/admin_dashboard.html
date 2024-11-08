@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Include Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Admin Dashboard</h2>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <div class="dashboard">
+        <h3>Statistics</h3>
+        <div class="stat-cards">
+            <div class="stat-card">
+                <h4>Total Accidents</h4>
+                <p>{{ total_accidents }}</p>
+            </div>
+            <div class="stat-card">
+                <h4>Accidents Today</h4>
+                <p>{{ accidents_today }}</p>
+            </div>
+            <div class="stat-card">
+                <h4>Accident Hot Spots</h4>
+                <div id="heatmap"></div> <!-- Placeholder for heatmap -->
+            </div>
+        </div>
+
+        <div class="charts">
+            <h3>Accident Trends</h3>
+            <!-- Location chart for accidents by location -->
+            <canvas id="locationChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        var locations = {{ accident_by_location | safe }};
+        var counts = {{ accident_count | safe }};
+        
+        var ctx = document.getElementById('locationChart').getContext('2d');
+        var locationChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: locations,
+                datasets: [{
+                    label: 'Accidents by Location',
+                    data: counts,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Feedback</title>
+</head>
+<body>
+    <h2>Feedbacks</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Created At</th>
+        </tr>
+        {% for feedback in feedbacks %}
+        <tr>
+            <td>{{ feedback.name }}</td>
+            <td>{{ feedback.email }}</td>
+            <td>{{ feedback.message }}</td>
+            <td>{{ feedback.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
